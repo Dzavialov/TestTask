@@ -1,0 +1,60 @@
+<div class="parent d-flex flex-column align-items-center justify-content-center">
+  <div class="col-3">
+
+    <div class="alert alert-primary mt-2" role="alert">
+      Note: You can upload only files in .docx format
+    </div>
+    <input name="userEmail" #usrEMail="ngModel" (input)="emailValidation($event)" (input)="onUserInput($event)" [(ngModel)]="userEmail" class="form-control mb-2" placeholder="Enter your email">
+    <div class="alert alert-danger" role="alert" *ngIf="!isValidEmail && usrEMail.touched">
+      Please enter valid email
+    </div>
+    <h3>Add Photos</h3>
+    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+      [uploader]="uploader" class="card bg-faded p-3 text-center mb-3 my-drop-zone">
+      <i class="fa fa-upload fa-3x"></i>
+      Drop photos here
+    </div>
+
+    Single
+    <input type="file" ng2FileSelect [uploader]="uploader" />
+  </div>
+
+
+  <div class="row-fluid" style="margin-bottom: 40px; margin-top: 20px;" *ngIf="uploader?.queue?.length">
+
+    <h3>File upload</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="50%">Name</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of uploader?.queue">
+          <td><strong>{{ item?.file?.name }}</strong></td>
+          <td *ngIf="uploader?.options?.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <div class="mb-3">
+        Upload progress:
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader?.progress + '%' }"></div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-success btn-s me-2" (click)="uploader?.uploadAll()"
+        [disabled]="!uploader?.getNotUploadedItems()?.length || isDisabled">
+        <span class="fa fa-upload"></span> Upload file
+      </button>
+      <button type="button" class="btn btn-danger btn-s" (click)="uploader?.clearQueue()"
+        [disabled]="!uploader?.queue?.length">
+        <span class="fa fa-trash"></span> Remove file
+      </button>
+    </div>
+
+  </div>
+
+</div>
